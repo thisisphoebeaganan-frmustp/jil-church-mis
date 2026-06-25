@@ -1,0 +1,43 @@
+{
+  "name": "JIL Church MIS",
+  "short_name": "JIL MIS",
+  "description": "JIL Church Worldwide — Ministry Information System · Life Group Tracker",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1B3A6B",
+  "background_color": "#1B3A6B",
+  "lang": "en",
+  "scope": "/",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Member",
+      "short_name": "Add",
+      "description": "Quickly add a new member",
+      "url": "/?action=add-member",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Log Bible Study",
+      "short_name": "Log",
+      "description": "Log a bible study session",
+      "url": "/?action=log-bs",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

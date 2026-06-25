@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1B3A6B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JIL MIS">
+<meta name="description" content="JIL Church Worldwide — Ministry Information System - Life Group Tracker">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="icon" type="image/png" href="/icons/icon-192.png">
+<title>JIL Church MIS</title>
+
+<!-- Tabler Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.34.0/dist/tabler-icons.min.css">
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  /* JIL Brand Blue palette */
+  --navy:#1B3A6B;--navy-mid:#1E4A88;--navy-light:#2563B0;
+  --gold:#2980B9;--gold-mid:#5BADDE;--gold-light:#E3EEF9;
+  --sage:#4a7c59;--sage-light:#e8f3ec;
+  --amber:#c47f17;--amber-light:#fef3d8;
+  --coral:#c0392b;--coral-light:#fde8e6;
+  --blue:#1a5fa8;--blue-light:#e8f1fb;
+  --purple:#6b3fa0;--purple-light:#f3edfb;
+  --bg:#F4F6FA;--card:#fff;--border:#DDE4EF;
+  --text:#1A1A2E;--muted:#5E6B83;--hint:#8E9BB5;
+  --sidebar-w:220px;
+  font-family:'Inter',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-size:15px;min-height:100vh;overflow-x:hidden}
+h1,h2,h3,.logo-text{font-family:'Inter',sans-serif;font-weight:700}
+
+/* ── UTILS ── */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.hidden{display:none!important}
+.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}
+.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+.text-muted{color:var(--muted);font-size:13px}
+.text-sm{font-size:12px}.text-xs{font-size:11px}
+.fw-600{font-weight:600}.fw-700{font-weight:700}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-family:'Inter',sans-serif;font-weight:500;transition:all .15s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy-mid)}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover{background:var(--navy-light)}
+.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{background:var(--bg)}
+.btn-danger{background:var(--coral);color:#fff}
+.btn-danger:hover{opacity:.9}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-block{width:100%;justify-content:center}
+.btn-icon{padding:7px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--text)}
+.btn-icon:hover{background:var(--bg)}
+
+/* ── FORMS ── */
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:500}
+input,select,textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:7px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--navy-light)}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.form-grid-2{grid-template-columns:1fr}}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.card+.card{margin-top:12px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:700;color:var(--navy)}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.b-invite{background:#f0e6ff;color:#5b21b6}
+.b-firsttimer{background:var(--amber-light);color:var(--amber)}
+.b-attendee{background:var(--blue-light);color:var(--blue)}
+.b-member{background:var(--sage-light);color:var(--sage)}
+.b-lgonly{background:#fce7f3;color:#be185d}
+.b-wsonly{background:#e0f2fe;color:#0369a1}
+.b-both{background:#d1fae5;color:#065f46}
+.b-admin{background:var(--gold-light);color:var(--gold)}
+
+/* ── PROGRESS ── */
+.progress-bar{background:var(--border);border-radius:4px;height:6px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s ease}
+
+/* ── AVATAR ── */
+.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:#fff}
+.avatar-lg{width:44px;height:44px;font-size:16px}
+
+/* ── STAT CARD ── */
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+.stat-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500}
+.stat-num{font-size:26px;font-weight:700;color:var(--navy)}
+.stat-sub{font-size:11px;color:var(--hint);margin-top:2px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+
+/* ── PIPELINE ── */
+.pipeline{display:flex;gap:0;margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.pip-stage{flex:1;text-align:center;padding:12px 6px;background:var(--card);border-right:1px solid var(--border)}
+.pip-stage:last-child{border-right:none;background:var(--sage-light)}
+.pip-num{font-size:22px;font-weight:700;color:var(--navy)}
+.pip-label{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.data-table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+table.data-table th{text-align:left;padding:9px 10px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.4px;background:var(--bg)}
+table.data-table td{padding:10px;border-bottom:1px solid var(--border);vertical-align:middle}
+table.data-table tr:last-child td{border-bottom:none}
+table.data-table tr:hover td{background:#fafaf8}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0}
+@media(min-width:600px){.modal-overlay{align-items:center;padding:20px}}
+.modal{background:#fff;width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:24px;max-height:90vh;overflow-y:auto}
+@media(min-width:600px){.modal{border-radius:16px;max-height:85vh}}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+.modal h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:18px}
+
+/* ── TABS ── */
+.tab-row{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-row::-webkit-scrollbar{display:none}
+.tab{padding:9px 14px;cursor:pointer;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;flex-shrink:0}
+.tab.active{color:var(--navy);border-bottom-color:var(--navy);font-weight:600}
+
+/* ── LAYOUT ── */
+.app-shell{display:flex;min-height:100vh}
+
+/* ── SIDEBAR (desktop) ── */
+.sidebar{width:var(--sidebar-w);background:var(--navy);color:#fff;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:transform .25s}
+.sidebar-logo{padding:20px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-logo h1{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.sidebar-logo p{font-size:10px;color:var(--gold-mid);margin-top:2px;letter-spacing:.3px;text-transform:uppercase}
+.user-chip{margin:10px;background:rgba(255,255,255,.07);border-radius:8px;padding:10px 12px}
+.user-chip .uname{font-size:13px;font-weight:600;color:#fff}
+.user-chip .urole{font-size:11px;color:rgba(255,255,255,.5)}
+.nav-sect{padding:6px 0}
+.nav-lbl{font-size:10px;color:rgba(255,255,255,.3);padding:8px 16px 4px;letter-spacing:.8px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;cursor:pointer;transition:background .15s;font-size:13px;color:rgba(255,255,255,.7);border-right:2px solid transparent}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.1);color:#fff}
+.nav-item.active{border-right-color:var(--gold-mid)}
+.nav-item i{font-size:17px;width:18px;flex-shrink:0}
+.nav-badge{background:var(--coral);color:#fff;font-size:9px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0}
+
+/* ── MAIN CONTENT ── */
+.main{flex:1;margin-left:var(--sidebar-w);min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:13px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+.topbar h2{font-size:17px;font-weight:700;color:var(--navy);flex:1}
+.topbar-actions{display:flex;gap:8px;flex-shrink:0}
+.page-body{padding:16px 20px;flex:1}
+
+/* ── MOBILE NAV ── */
+.mobile-topbar{display:none;background:var(--navy);padding:12px 16px;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.mobile-topbar h2{font-size:15px;font-weight:700;color:#fff;flex:1}
+.hamburger{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:2px}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);z-index:100;padding:4px 0 env(safe-area-inset-bottom,8px)}
+.bottom-nav-inner{display:flex;justify-content:space-around}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 12px;cursor:pointer;color:var(--muted);font-size:10px;border:none;background:none;flex:1}
+.bnav-item.active{color:var(--navy)}
+.bnav-item i{font-size:22px}
+.bnav-item span{font-weight:500}
+
+/* ── DRAWER (mobile sidebar) ── */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150}
+.drawer{position:fixed;top:0;left:0;height:100vh;width:260px;background:var(--navy);z-index:160;transform:translateX(-100%);transition:transform .25s;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+
+/* ── REMINDER BANNER ── */
+.reminder-banner{background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:#fff;border-radius:12px;padding:16px;margin-bottom:16px}
+.reminder-banner .rb-label{font-size:10px;color:var(--gold-mid);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.reminder-banner .rb-main{font-size:15px;font-weight:700}
+.reminder-banner .rb-sub{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px}
+
+/* ── ATT CHECKLIST ── */
+.att-check{width:26px;height:26px;border-radius:5px;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s;background:#fff;flex-shrink:0}
+.att-check.present{background:var(--sage);border-color:var(--sage);color:#fff}
+
+/* ── LG CARD ── */
+.lg-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s;margin-bottom:12px}
+.lg-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.lg-card-hdr{background:var(--navy);padding:14px 16px;color:#fff}
+.lg-card-body{padding:14px 16px}
+
+/* ── FOLLOW-UP ── */
+.fu-card{border:1px solid #f5c842;background:#fffbeb;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.fu-name{font-weight:700;font-size:13px;color:#92400e}
+.fu-detail{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── TEACHING ── */
+.teaching-card{border:1px solid var(--border);border-radius:9px;padding:13px;display:flex;align-items:flex-start;gap:10px;background:#fff;margin-bottom:8px}
+.t-icon{width:38px;height:38px;border-radius:7px;background:var(--purple-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--purple);font-size:18px}
+
+/* ── AUTH SCREENS ── */
+.auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy);padding:20px}
+.auth-card{background:#fff;border-radius:20px;padding:32px;width:100%;max-width:420px}
+.auth-logo{text-align:center;margin-bottom:28px}
+.auth-logo .cross{font-size:32px;margin-bottom:8px}
+.auth-logo h1{font-size:22px;color:var(--navy)}
+.auth-logo p{font-size:13px;color:var(--muted);margin-top:4px}
+.auth-tabs{display:flex;background:var(--bg);border-radius:8px;padding:3px;margin-bottom:20px}
+.auth-tab{flex:1;text-align:center;padding:8px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--muted);font-weight:500;transition:all .15s}
+.auth-tab.active{background:#fff;color:var(--navy);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+/* ── ONBOARDING STEPS ── */
+.step-dots{display:flex;justify-content:center;gap:6px;margin-bottom:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .2s}
+.dot.active{background:var(--navy);width:20px;border-radius:4px}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cat-btn{border:1px solid var(--border);border-radius:9px;padding:11px;cursor:pointer;text-align:center;font-size:12px;background:#fff;transition:all .15s}
+.cat-btn.sel{border-color:var(--navy);background:var(--blue-light);font-weight:600;color:var(--navy)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(min-width:768px){.toast{bottom:20px}}
+
+/* ── SEARCH ── */
+.search-wrap{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:14px}
+.search-wrap input{border:none;outline:none;flex:1;font-size:14px;background:none}
+.search-wrap i{color:var(--hint);font-size:17px}
+
+/* ── HEALTH SCORE ── */
+.health-ring{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0;border:4px solid}
+
+/* ── AI CHAT ── */
+.ai-msg{border-radius:10px;padding:11px 13px;margin-bottom:8px;font-size:13px;line-height:1.6}
+.ai-msg.user{background:var(--navy);color:#fff;margin-left:20%}
+.ai-msg.bot{background:var(--blue-light);border:1px solid #b8d4f5;margin-right:20%}
+.ai-msg.thinking{color:var(--muted);font-style:italic}
+
+/* ── RESPONSIVE ── */
+@media(max-width:767px){
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .mobile-topbar{display:flex}
+  .topbar{display:none}
+  .bottom-nav{display:block}
+  .page-body{padding:12px 14px;padding-bottom:80px}
+  .drawer-overlay{display:block}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:20px 20px 0 0;max-height:92vh}
+  .modal-handle{display:block}
+  .pip-num{font-size:18px}
+}
+@media(min-width:768px){.modal-handle{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     AUTH SCREENS
+══════════════════════════════════════════ -->
+<div id="auth-screen" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="cross" style="color:var(--navy);font-size:36px">✝</div>
+      <h1 style="font-size:24px;letter-spacing:-.3px">JIL Church MIS</h1>
+      <p style="font-size:12px;margin-top:3px">Jesus Is Lord Church Worldwide</p>
+      <p style="font-size:11px;color:var(--hint);margin-top:1px">Ministry Information System</p>
+    </div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchAuth('login',this)">Sign In</div>
+      <div class="auth-tab" onclick="switchAuth('signup',this)">Create Account</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="auth-login">
+      <div class="form-row"><label>Email</label><input id="login-email" type="email" placeholder="your@email.com" autocomplete="email"></div>
+      <div class="form-row"><label>Password</label><input id="login-password" type="password" placeholder="Password" autocomplete="current-password"></div>
+      <div id="login-error" class="text-sm" style="color:var(--coral);margin-bottom:10px;display:none"></div>
+      <button class="btn btn-primary btn-block" onclick="doLogin()">Sign In</button>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px">
+        <span style="cursor:pointer;color:var(--blue);text-decoration:underline" onclick="doForgotPassword()">Forgot password?</span>
+      </p>
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="auth-signup" class="hidden">
+      <div class="form-row"><label>Email</label><input id="signup-email" type="email" placeholder="your@email.com" autocomplete="email"></div>
+      <div class="form-row"><label>Password (min 6 chars)</label><input id="signup-password" type="password" placeholder="Create password" autocomplete="new-password"></div>
+      <div id="signup-error" class="text-sm" style="color:var(--coral);margin-bottom:10px;display:none"></div>
+      <button class="btn btn-primary btn-block" onclick="doSignup()">Create Account</button>
+    </div>
+
+    <p style="text-align:center;font-size:11px;color:var(--hint);margin-top:16px">
+      Powered by Supabase · Data is securely stored and synced across all your devices.
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ONBOARDING (profile setup after signup)
+══════════════════════════════════════════ -->
+<div id="onboard-screen" class="auth-screen hidden">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="cross" style="color:var(--navy);font-size:28px">✝</div>
+      <h1 style="font-size:20px">Set Up Your Profile</h1>
+      <p style="font-size:12px;margin-top:2px">JIL Church MIS</p>
+    </div>
+    <div id="ob-dots" class="step-dots">
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+
+    <div id="ob-step1">
+      <div class="form-row"><label>Full Name *</label><input id="ob-name" placeholder="Your full name"></div>
+      <div class="form-row"><label>Church Name *</label><input id="ob-church" placeholder="e.g. Grace Community Church"></div>
+      <div class="form-row"><label>Designation / Title</label><input id="ob-designation" placeholder="e.g. Life Group Leader, Cell Coordinator"></div>
+      <button class="btn btn-primary btn-block" onclick="obStep(2)">Next →</button>
+    </div>
+
+    <div id="ob-step2" class="hidden">
+      <div class="form-row"><label>Role</label>
+        <select id="ob-role">
+          <option>Life Group Leader</option><option>Zone Leader</option>
+          <option>Cell Coordinator</option><option>MIS Manager</option><option>Super Admin</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Ministry</label><input id="ob-ministry" placeholder="e.g. Youth, Worship, Evangelism"></div>
+      <div class="form-row"><label>Category</label>
+        <div class="cat-grid">
+          <div class="cat-btn sel" onclick="selCat(this,'Men')">👨 Men<br><span style="font-size:10px;opacity:.7">Male 35+</span></div>
+          <div class="cat-btn" onclick="selCat(this,'Women')">👩 Women<br><span style="font-size:10px;opacity:.7">Female 35+</span></div>
+          <div class="cat-btn" onclick="selCat(this,'YAN')">🧑 YAN<br><span style="font-size:10px;opacity:.7">Age 25–34</span></div>
+          <div class="cat-btn" onclick="selCat(this,'KKB')">🧒 KKB<br><span style="font-size:10px;opacity:.7">Age 12–24</span></div>
+          <div class="cat-btn" onclick="selCat(this,'Children')" style="grid-column:span 2">👶 Children (12 &amp; below)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" style="flex:1" onclick="obStep(1)">← Back</button>
+        <button class="btn btn-primary" style="flex:2" onclick="obStep(3)">Next →</button>
+      </div>
+    </div>
+
+    <div id="ob-step3" class="hidden">
+      <p class="text-muted" style="margin-bottom:14px">Create your first Life Group to get started.</p>
+      <div class="form-row"><label>Life Group Name *</label><input id="ob-lgname" placeholder="e.g. The Upper Room, Fishers of Men"></div>
+      <div class="form-grid-2">
+        <div class="form-row"><label>Meeting Day</label>
+          <select id="ob-lgday"><option>Monday</option><option>Tuesday</option><option selected>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select>
+        </div>
+        <div class="form-row"><label>Time</label><input id="ob-lgtime" type="time" value="19:00"></div>
+      </div>
+      <div class="form-row"><label>Location / Venue</label><input id="ob-lgloc" placeholder="Address or landmark"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" style="flex:1" onclick="obStep(2)">← Back</button>
+        <button class="btn btn-gold" style="flex:2" onclick="finishOnboard()">Start My MIS ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════ -->
+<div id="main-app" class="hidden">
+
+  <!-- Mobile topbar -->
+  <div class="mobile-topbar">
+    <button class="hamburger" onclick="openDrawer()" aria-label="Menu"><i class="ti ti-menu-2"></i></button>
+    <h2 id="mobile-page-title">Dashboard</h2>
+    <button class="btn-icon" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff" onclick="openAddMemberModal()"><i class="ti ti-plus"></i></button>
+  </div>
+
+  <!-- Drawer overlay -->
+  <div class="drawer-overlay hidden" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+  <!-- Drawer (mobile sidebar) -->
+  <div class="drawer" id="drawer">
+    <div class="sidebar-logo" style="padding-top:env(safe-area-inset-top,20px)">
+      <h1>✝ JIL Church MIS</h1>
+      <p id="drawer-church">Jesus Is Lord Church Worldwide</p>
+    </div>
+    <div class="user-chip">
+      <div class="uname" id="drawer-name">Leader</div>
+      <div class="urole" id="drawer-role">Life Group Leader</div>
+    </div>
+    <div id="drawer-nav"></div>
+    <div style="padding:16px;margin-top:auto">
+      <button class="btn btn-outline btn-block btn-sm" style="color:#fff;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.08)" onclick="doLogout()"><i class="ti ti-logout"></i> Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Desktop Sidebar -->
+  <div class="app-shell">
+    <nav class="sidebar">
+      <div class="sidebar-logo">
+        <h1>✝ JIL Church MIS</h1>
+        <p id="sidebar-church">Jesus Is Lord Church Worldwide</p>
+      </div>
+      <div class="user-chip">
+        <div class="uname" id="sidebar-name">Leader</div>
+        <div class="urole" id="sidebar-role">Life Group Leader</div>
+      </div>
+      <div id="sidebar-nav"></div>
+      <div style="padding:12px;margin-top:auto">
+        <button class="btn btn-outline btn-block btn-sm" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.15);background:transparent" onclick="doLogout()"><i class="ti ti-logout"></i> Sign Out</button>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main">
+      <div class="topbar">
+        <h2 id="topbar-title">Dashboard</h2>
+        <div class="topbar-actions" id="topbar-actions"></div>
+      </div>
+
+      <!-- PAGES -->
+      <div class="page-body" id="page-container"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav (mobile) -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <button class="bnav-item active" data-page="dashboard" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i><span>Home</span></button>
+      <button class="bnav-item" data-page="lifegroups" onclick="showPage('lifegroups')"><i class="ti ti-users-group"></i><span>Groups</span></button>
+      <button class="bnav-item" data-page="attendance" onclick="showPage('attendance')"><i class="ti ti-calendar-check"></i><span>Attend.</span></button>
+      <button class="bnav-item" data-page="teachings" onclick="showPage('teachings')"><i class="ti ti-book"></i><span>Teach</span></button>
+      <button class="bnav-item" data-page="admin-hub" onclick="showPage('admin-hub')"><i class="ti ti-chart-bar"></i><span>Admin</span></button>
+    </div>
+  </nav>
+</div>
+
+<!-- Modal -->
+<div id="modal-overlay" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/config.js"></script>
+<script src="/rbac.js"></script>
+<script src="/app.js"></script>
+<script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.register('/sw.js').then(()=>console.log('SW registered'));
+    });
+  }
+</script>
+</body>
+</html>
