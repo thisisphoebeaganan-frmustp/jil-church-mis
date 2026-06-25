@@ -1443,7 +1443,7 @@ async function init(){
 
 // CSS helper for section titles
 document.head.insertAdjacentHTML('beforeend',`<style>
-.sec-title{font-size:14px;font-weight:700;color:var(--navy);font-family:'Lora',serif}
+.sec-title{font-size:14px;font-weight:700;color:var(--navy)}
 .section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 </style>`);
 
